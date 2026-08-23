@@ -1,0 +1,10 @@
+# 运行时状态与审计日志（不入库）
+state.json
+audit.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/

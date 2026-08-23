@@ -1,0 +1,121 @@
+{
+  "rules": {
+    "bug": {
+      "enabled": true,
+      "skills": [
+        "systematic-debugging"
+      ],
+      "stages": [
+        "reproduce",
+        "root-cause",
+        "fix",
+        "verify"
+      ]
+    },
+    "implement": {
+      "enabled": true,
+      "skills": [
+        "test-driven-development"
+      ],
+      "stages": [
+        "write-test",
+        "implement",
+        "tests-pass"
+      ]
+    },
+    "multi_step": {
+      "enabled": true,
+      "skills": [
+        "writing-plans",
+        "executing-plans"
+      ],
+      "stages": [
+        "plan",
+        "execute"
+      ]
+    },
+    "claim_complete": {
+      "enabled": true,
+      "skills": [
+        "verification-before-completion"
+      ],
+      "stages": [
+        "verify"
+      ]
+    },
+    "feature_design": {
+      "enabled": true,
+      "skills": [
+        "brainstorming"
+      ],
+      "stages": [
+        "explore",
+        "decide"
+      ]
+    },
+    "doc_writing": {
+      "enabled": true,
+      "skills": [
+        "doc-coauthoring"
+      ],
+      "stages": [
+        "outline",
+        "draft",
+        "review"
+      ]
+    },
+    "merge": {
+      "skills": [
+        "requesting-code-review",
+        "finishing-a-development-branch"
+      ],
+      "stages": [
+        "self-review",
+        "submit-review",
+        "merge"
+      ]
+    },
+    "review_received": {
+      "skills": [
+        "receiving-code-review"
+      ],
+      "stages": [
+        "evaluate",
+        "implement"
+      ]
+    },
+    "isolation": {
+      "skills": [
+        "using-git-worktrees"
+      ],
+      "stages": [
+        "worktree",
+        "develop",
+        "merge-back"
+      ]
+    }
+  },
+  "stage_labels": {
+    "reproduce": "复现问题",
+    "root-cause": "定位根因",
+    "fix": "实施修复",
+    "verify": "运行验证并展示证据",
+    "write-test": "先写测试",
+    "implement": "实现功能",
+    "tests-pass": "测试通过",
+    "plan": "产出计划",
+    "execute": "按计划执行",
+    "explore": "探索需求与设计选项",
+    "decide": "与用户确认方案",
+    "outline": "明确文档结构与读者",
+    "draft": "撰写初稿",
+    "review": "复核文档可用性",
+    "self-review": "自查 diff 与测试",
+    "submit-review": "发起评审",
+    "merge": "合并交付",
+    "evaluate": "评估评审意见",
+    "worktree": "创建隔离工作区",
+    "develop": "在隔离区开发",
+    "merge-back": "合并回主工作区"
+  }
+}
