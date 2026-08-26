@@ -142,6 +142,30 @@ class TestWorkflowGate(unittest.TestCase):
         out = self.call(self.m.wf_notes)  # 不应抛异常
         self.assertIn("旧式字符串备注", out)
 
+    # ── wf_rules 规则管理（无扩展时的替代入口）───────
+    def test_wf_rules_list(self):
+        out = self.call(self.m.wf_rules, "list")
+        self.assertIn("bug", out)
+        self.assertIn("research", out)  # 含新类型
+
+    def test_wf_rules_disable_and_enable(self):
+        out = self.call(self.m.wf_rules, "disable", "bug")
+        self.assertIn("已禁用", out)
+        rules = json.load(open(self.m.RULES_PATH, encoding="utf-8"))
+        self.assertFalse(rules["rules"]["bug"].get("enabled", True))
+        # 禁用后 wf_begin 应提示未启用
+        out = self.call(self.m.wf_begin, "bug")
+        self.assertIn("未启用", out)
+        # 重新启用
+        out = self.call(self.m.wf_rules, "enable", "bug")
+        self.assertIn("已启用", out)
+        out = self.call(self.m.wf_begin, "bug")
+        self.assertIn("已激活", out)
+
+    def test_wf_rules_unknown_rule(self):
+        out = self.call(self.m.wf_rules, "disable", "not-a-rule")
+        self.assertIn("未知规则", out)
+
     # ── 规则表一致性 ──────────────────────────
     def test_new_rules_present_in_json(self):
         rules = json.load(open(self.m.RULES_PATH, encoding="utf-8"))

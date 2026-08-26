@@ -75,6 +75,7 @@ pip install mcp pydantic
 | `wf_status` | 任意时刻 | 查看任务类型、进度、留痕数量 |
 | `wf_notes` | 回读备注时 | 列出各阶段备注与证据（审计用） |
 | `wf_reset` | 任务结束时 | 清除任务状态 |
+| `wf_rules` | 管理规则时 | 查看/启用/禁用规则（无 pi 扩展时替代原 `/workflow` 命令）；`list` / `enable <rule>` / `disable <rule>` |
 
 ### 任务类型 → 技能链（12 类 + 豁免）
 
@@ -96,8 +97,8 @@ pip install mcp pydantic
 
 ## ⚠️ pi 扩展状态（v0.3.1 起已停用）
 
-> **回滚说明**：pi 扩展（自动提醒）曾两次导致 pi 启动/输入异常，已全部移除并隔离；`extension/` 目录仅保留参考实现（未部署不生效）。
-> 推荐模式：**宪章（AGENTS.md 工作流表）+ MCP Server**——任务开始时**主动调用 `wf_begin`** 获取阶段清单，核心门控功能不受影响。
+> **回滚说明**：pi 扩展（自动提醒）曾两次导致 pi 启动/输入异常，已全部移除（`extensions/` 无残留）。`extension/` 目录仅保留参考实现（未部署不生效）。
+> 推荐模式：**宪章（AGENTS.md 工作流表）+ MCP Server**——任务开始时**主动调用 `wf_begin`** 获取阶段清单；规则管理用 `wf_rules`（无 `/workflow` 命令）；核心门控功能不受影响。
 
 ### 触发机制
 

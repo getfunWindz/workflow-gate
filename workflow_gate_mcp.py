@@ -225,6 +225,35 @@ async def wf_status() -> str:
 
 
 @mcp.tool()
+async def wf_rules(action: str = "list", rule: str = "") -> str:
+    """管理规则表（无 pi 扩展时的替代入口，对应原 /workflow 命令）。
+    action 取值：list（列出全部规则与开关）、enable <rule>、disable <rule>。
+    规则开关持久化于 workflow.json，禁用后 wf_begin 会提示该流程未启用。"""
+    rules, labels = _load_rules()
+    if not rules:
+        return "✗ 规则表为空或不可读。"
+    if action == "list":
+        lines = []
+        for k, v in rules.items():
+            on = v.get("enabled", True)
+            mark = "✅" if on else "⏸"
+            skills = ", ".join(v.get("skills", [])) or "无技能"
+            lines.append(f"{mark} {k}: {skills}{'' if on else '（未启用）'}")
+        return "工作流规则:\n" + "\n".join(lines)
+    if action in ("enable", "disable"):
+        if rule not in rules:
+            return f"✗ 未知规则「{rule}」。可用: {', '.join(rules.keys())}"
+        if action == "enable":
+            rules[rule].pop("enabled", None)
+        else:
+            rules[rule]["enabled"] = False
+        _save_json(RULES_PATH, {"rules": rules, "stage_labels": labels})
+        _audit("wf_rules", f"{action} | {rule}")
+        return f"✔ 已{('启用' if action == 'enable' else '禁用')}规则「{rule}」"
+    return "用法: wf_rules(action=\"list\" | \"enable\" | \"disable\", rule=...)"
+
+
+@mcp.tool()
 async def wf_notes() -> str:
     """回读当前任务各阶段记录的备注与证据（审计用）。无激活任务时列出最近豁免/审计？仅当任务激活时有效。"""
     state = _load_state()
