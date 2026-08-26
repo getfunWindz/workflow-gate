@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+  <title>workflow-gate 工作流门控 MCP Server：左侧标题与特性，右侧真实 wf_begin 会话输出，底部检查点轨道</title>
+  <rect width="1200" height="420" rx="22" fill="#0B0E11"/>
+  <!-- 左侧：标题区 -->
+  <text x="64" y="104" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="20" fill="#3DDC97" letter-spacing="3">MCP SERVER · V0.2.0</text>
+  <text x="64" y="176" font-family="ui-sans-serif, -apple-system, 'Segoe UI', sans-serif" font-size="60" font-weight="700" fill="#E8ECEF">workflow-gate</text>
+  <text x="64" y="222" font-family="ui-sans-serif, -apple-system, 'Segoe UI', sans-serif" font-size="26" fill="#8B95A1">工作流门控 MCP Server</text>
+  <text x="64" y="272" font-family="ui-sans-serif, -apple-system, 'Segoe UI', sans-serif" font-size="21" fill="#B8C1C9">把工程纪律变成 agent 无法绕过的门——</text>
+  <text x="64" y="298" font-family="ui-sans-serif, -apple-system, 'Segoe UI', sans-serif" font-size="21" fill="#B8C1C9">不是建议，是流程。</text>
+  <!-- chips -->
+  <g font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="18" fill="#C7CFD6">
+    <rect x="64" y="328" width="196" height="40" rx="20" fill="none" stroke="#2A323C" stroke-width="2"/>
+    <text x="88" y="353">TDD 门控</text>
+    <rect x="276" y="328" width="238" height="40" rx="20" fill="none" stroke="#2A323C" stroke-width="2"/>
+    <text x="300" y="353">系统化调试</text>
+    <rect x="530" y="328" width="196" height="40" rx="20" fill="none" stroke="#2A323C" stroke-width="2"/>
+    <text x="554" y="353">文档协作</text>
+  </g>
+  <!-- 右侧：真实会话输出卡（取自 wf_begin(task_type="bug") 实录） -->
+  <g>
+    <rect x="712" y="56" width="424" height="308" rx="14" fill="#10151A" stroke="#2A323C" stroke-width="2"/>
+    <circle cx="740" cy="84" r="5" fill="#4A5560"/>
+    <circle cx="758" cy="84" r="5" fill="#4A5560"/>
+    <circle cx="776" cy="84" r="5" fill="#4A5560"/>
+    <text x="740" y="120" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="16" fill="#3DDC97">$ wf_begin(task_type="bug")</text>
+    <text x="740" y="150" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="16" fill="#E8ECEF">⚡ workflow-gate 已激活</text>
+    <text x="740" y="176" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="15" fill="#8B95A1">必须遵循的技能链：</text>
+    <text x="740" y="199" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="15" fill="#B8C1C9">  /skill:systematic-debugging</text>
+    <text x="740" y="224" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="15" fill="#8B95A1">阶段清单：</text>
+    <circle cx="746" cy="249" r="6" fill="none" stroke="#3DDC97" stroke-width="2"/>
+    <path d="M743 249 l2.5 2.5 l5 -5" stroke="#3DDC97" stroke-width="2" fill="none"/>
+    <text x="762" y="254" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="15" fill="#E8ECEF">1. 复现问题 ✓</text>
+    <circle cx="746" cy="277" r="6" fill="none" stroke="#4A5560" stroke-width="2"/>
+    <text x="762" y="282" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="15" fill="#8B95A1">2. 定位根因</text>
+    <circle cx="746" cy="305" r="6" fill="none" stroke="#4A5560" stroke-width="2"/>
+    <text x="762" y="310" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="15" fill="#8B95A1">3. 实施修复或记录结论</text>
+    <circle cx="746" cy="333" r="6" fill="none" stroke="#4A5560" stroke-width="2"/>
+    <text x="762" y="338" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="15" fill="#8B95A1">4. 运行验证并展示证据</text>
+  </g>
+  <!-- 底部 motif：检查点轨道（项目原生：wf_check 的 ✓/○） -->
+  <g>
+    <line x1="64" y1="392" x2="1136" y2="392" stroke="#2A323C" stroke-width="2"/>
+    <circle cx="64" cy="392" r="8" fill="#0B0E11" stroke="#3DDC97" stroke-width="2"/>
+    <path d="M61 392 l2.5 2.5 l5 -5" stroke="#3DDC97" stroke-width="2" fill="none"/>
+    <circle cx="300" cy="392" r="8" fill="#0B0E11" stroke="#4A5560" stroke-width="2"/>
+    <circle cx="536" cy="392" r="8" fill="#0B0E11" stroke="#4A5560" stroke-width="2"/>
+    <circle cx="772" cy="392" r="8" fill="#0B0E11" stroke="#4A5560" stroke-width="2"/>
+    <circle cx="1008" cy="392" r="8" fill="#0B0E11" stroke="#4A5560" stroke-width="2"/>
+    <circle cx="1136" cy="392" r="8" fill="#0B0E11" stroke="#3DDC97" stroke-width="2"/>
+    <path d="M1133 392 l2.5 2.5 l5 -5" stroke="#3DDC97" stroke-width="2" fill="none"/>
+  </g>
+</svg>
