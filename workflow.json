@@ -64,6 +64,38 @@
         "review"
       ]
     },
+    "decision": {
+      "enabled": true,
+      "skills": [
+        "brainstorming"
+      ],
+      "stages": [
+        "discuss",
+        "decide",
+        "record"
+      ]
+    },
+    "research": {
+      "enabled": true,
+      "skills": [],
+      "stages": [
+        "search",
+        "synthesize",
+        "report"
+      ]
+    },
+    "review": {
+      "enabled": true,
+      "skills": [
+        "systematic-debugging"
+      ],
+      "stages": [
+        "scan",
+        "classify",
+        "fix",
+        "verify"
+      ]
+    },
     "merge": {
       "skills": [
         "requesting-code-review",
@@ -98,7 +130,7 @@
   "stage_labels": {
     "reproduce": "复现问题",
     "root-cause": "定位根因",
-    "fix": "实施修复",
+    "fix": "实施修复或记录结论",
     "verify": "运行验证并展示证据",
     "write-test": "先写测试",
     "implement": "实现功能",
@@ -107,6 +139,13 @@
     "execute": "按计划执行",
     "explore": "探索需求与设计选项",
     "decide": "与用户确认方案",
+    "discuss": "讨论澄清需求",
+    "record": "记录决策结论",
+    "search": "检索/收集素材",
+    "synthesize": "综合分析",
+    "report": "产出成果",
+    "scan": "全面扫描问题",
+    "classify": "归类与分级",
     "outline": "明确文档结构与读者",
     "draft": "撰写初稿",
     "review": "复核文档可用性",
