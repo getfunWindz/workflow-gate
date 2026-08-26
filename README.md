@@ -139,3 +139,7 @@ workflow-gate 不做方法论发明，只做编排与执行。规则表引用的
 MIT License（见 `LICENSE`）。引用的技能内容遵循其各自上游许可。
 
 > **免责声明**：本工具是流程约束器，不提供代码修复/测试/文档能力；依赖你环境中已部署的对应技能（`/skill:xxx`）。请确保技能文件正确部署，否则门控提示与实际行动可能脱节。
+
+<p align="center">
+  <a href="https://github.com/oil-oil/beautify-github-readme"><img src="./assets/readme/made-with-beautify.svg" width="300" alt="README made with beautify-github-readme"></a>
+</p>

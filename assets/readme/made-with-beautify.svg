@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="64" viewBox="0 0 420 64">
+  <title>README made with beautify-github-readme</title>
+  <desc>紧凑签名：workflow-gate 门禁绿检查点 motif 与 README MADE WITH beautify-github-readme 字样及外向箭头</desc>
+  <rect width="420" height="64" rx="16" fill="#0B0E11"/>
+  <!-- 项目原生 motif：门禁检查点 ✓ -->
+  <circle cx="30" cy="32" r="9" fill="none" stroke="#3DDC97" stroke-width="2.5"/>
+  <path d="M26 32 l3 3 l6 -6" stroke="#3DDC97" stroke-width="2.5" fill="none"/>
+  <text x="52" y="28" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="12" letter-spacing="2" fill="#8B95A1">README MADE WITH</text>
+  <text x="52" y="48" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="17" fill="#E8ECEF">beautify-github-readme</text>
+  <!-- 外向箭头 cue -->
+  <g stroke="#3DDC97" stroke-width="2.5" fill="none">
+    <line x1="378" y1="36" x2="398" y2="36"/>
+    <path d="M394 32 l5 4 l-5 4"/>
+  </g>
+</svg>
