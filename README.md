@@ -112,8 +112,8 @@ pip install mcp pydantic
 |---|---|
 | `workflow_gate_mcp.py` | MCP Server（5 工具：状态、审计、门控输出） |
 | `workflow.json` | 规则表：任务类型 → 技能链/阶段/开关；`"ordered": true` 强制顺序 |
-| `extension/workflow-gate.ts` | pi 扩展：input 提醒、`/workflow` 命令（list/enable/disable/pause/resume/status） |
-| `extension/workflow-gate-core.ts` | 扩展纯逻辑（分类候选/豁免/提醒文案），可独立测试 |
+| `extension/workflow-gate/index.ts` | pi 扩展入口（input 提醒、`/workflow` 命令）；**子目录模式**：pi 仅自动发现顶层 *.ts 与 */index.ts，core.ts 不会被误加载为扩展 |
+| `extension/workflow-gate/core.ts` | 扩展纯逻辑（分类候选/豁免/提醒文案），可独立测试 |
 | `tests/` `test/` | Python（unittest 11 例）+ TypeScript（node:test 11 例） |
 | `state.json` / `audit.log` | 运行时进度与审计（不入库） |
 

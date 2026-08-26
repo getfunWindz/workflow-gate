@@ -16,7 +16,7 @@ import {
   buildReminder,
   buildProgressHint,
   TYPE_LABELS,
-} from "./workflow-gate-core.ts";
+} from "./core.ts";
 
 const WORKFLOW_DIR = path.join(process.env.PI_CODING_AGENT_DIR || path.join(os.homedir(), ".pi", "agent"), "workflow");
 const RULES_PATH = path.join(WORKFLOW_DIR, "workflow.json");

@@ -9,7 +9,7 @@ import {
   isExempted,
   buildReminder,
   buildProgressHint,
-} from "../extension/workflow-gate-core.ts";
+} from "../extension/workflow-gate/core.ts";
 
 // ── 分类候选 ─────────────────────────────
 test("报告类任务优先 doc_writing（修复误分类）", () => {

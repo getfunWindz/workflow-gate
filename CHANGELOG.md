@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.3.0（2026-08-27）
+
+**热修复：pi 扩展目录结构不合法**
+
+- 问题：v0.2 将 `workflow-gate-core.ts` 放在 `extensions/` 顶层，pi 会把**顶层每个 `.ts` 文件**当作独立扩展加载；core.ts 没有 default export，扩展加载失败并影响 pi 启动与其他会话输入；
+- 修复：改为官方支持的**子目录模式**——`extensions/workflow-gate/index.ts`（入口）+ `core.ts`（依赖）；与 pi 官方示例 `doom-overlay/` 同构；
+- 验证：`test/extension-core.test.ts` 11/11 pass（Node type-stripping 实际执行）；
+- 提示：旧顶层文件已隔离（`extensions/_quarantine/`），确认无误后可删除。
+
 ## v0.2.0（2026-08-26）
 
 依据《使用问题报告》（17 次触发 / 分类准确率约 40%）的三层修复：
