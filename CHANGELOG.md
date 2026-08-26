@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.4.0（2026-08-27）
+
+**无 pi 扩展路线正式确立**
+
+- 回滚收尾：extensions/ 隔离区已清理，运行环境零扩展残留；
+- 功能补位：新增 MCP 工具 wf_rules（list / enable / disable），替代原扩展的 /workflow 命令；
+- 模式说明：宪章（AGENTS.md 工作流表）+ MCP Server 为唯一运行方式；
+- 测试：新增 3 例，共 14/14 全绿；
+- extension/ 目录仅保留参考实现。
+
 ## v0.3.1（2026-08-27）
 
 **回滚：pi 扩展整体停用**
