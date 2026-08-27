@@ -24,7 +24,6 @@ export const TYPE_LABELS: Record<string, string> = {
   bug: "调试修复",
   implement: "功能实现",
   multi_step: "多步骤任务",
-  claim_complete: "完成前验证",
   feature_design: "方案设计",
   doc_writing: "文档撰写",
   decision: "讨论决策",

@@ -9,6 +9,7 @@ import {
   isExempted,
   buildReminder,
   buildProgressHint,
+  TYPE_LABELS,
 } from "../extension/workflow-gate/core.ts";
 
 // ── 分类候选 ─────────────────────────────
@@ -101,6 +102,10 @@ test("isolation 类词可命中", () => {
 
 test("review 补充词可命中", () => {
   assert.ok(detectTaskCandidates("代码审查这个项目").includes("review"));
+});
+
+test("TYPE_LABELS 与规则同步（claim_complete 已删）", () => {
+  assert.equal(TYPE_LABELS["claim_complete"], undefined);
 });
 
 // ── 进度提示 ─────────────────────────────
