@@ -44,9 +44,9 @@ export const KEYWORDS: Record<string, string[]> = {
   decision: ["讨论", "决策", "定方案", "确认方案", "商量", "聊聊"],
   research: ["调研", "检索", "搜索资料", "查资料", "找数据", "评估数据集", "查询论文", "资料收集"],
   review: ["回顾", "评审", "全面检查", "找问题", "审查", "review", "代码审查", "看看问题"],
-  merge: ["合并", "发布", "pull request", "pull-request", "上线", "交付"],
+  merge: ["合并", "发布", "更新", "pull request", "pull-request", "上线", "交付"],
   review_received: ["评审意见", "收到反馈", "审阅意见", "评审反馈", "review 意见"],
-  isolation: ["工作区", "隔离", "并行开发", "实验", "沙箱"],
+  isolation: ["工作区", "隔离", "并行开发", "沙箱"],
 };
 
 /** 直接型：交付物明确，提醒直接建议执行（不要求用户确认任务实质） */

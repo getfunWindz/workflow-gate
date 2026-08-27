@@ -96,8 +96,12 @@ test("review_received 类词可命中", () => {
   assert.ok(detectTaskCandidates("我收到了评审意见").includes("review_received"));
 });
 
-test("isolation 类词可命中", () => {
-  assert.ok(detectTaskCandidates("在隔离工作区开发").includes("isolation"));
+test("isolation 不含实验词（科研语境不误命中）", () => {
+  assert.ok(!detectTaskCandidates("做个物理实验").includes("isolation"));
+});
+
+test("merge 词库含更新词", () => {
+  assert.ok(detectTaskCandidates("准备更新发布到仓库").includes("merge"));
 });
 
 test("review 补充词可命中", () => {
