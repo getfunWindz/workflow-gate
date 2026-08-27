@@ -2,7 +2,7 @@
   <title>workflow-gate 工作流门控 MCP Server：左侧标题与特性，右侧真实 wf_begin 会话输出，底部检查点轨道</title>
   <rect width="1200" height="420" rx="22" fill="#0B0E11"/>
   <!-- 左侧：标题区 -->
-  <text x="64" y="104" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="20" fill="#3DDC97" letter-spacing="3">MCP SERVER · V0.2.0</text>
+  <text x="64" y="104" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="20" fill="#3DDC97" letter-spacing="3">MCP SERVER · v1.1</text>
   <text x="64" y="176" font-family="ui-sans-serif, -apple-system, 'Segoe UI', sans-serif" font-size="60" font-weight="700" fill="#E8ECEF">workflow-gate</text>
   <text x="64" y="222" font-family="ui-sans-serif, -apple-system, 'Segoe UI', sans-serif" font-size="26" fill="#8B95A1">工作流门控 MCP Server</text>
   <text x="64" y="272" font-family="ui-sans-serif, -apple-system, 'Segoe UI', sans-serif" font-size="21" fill="#B8C1C9">把工程纪律变成 agent 无法绕过的门——</text>

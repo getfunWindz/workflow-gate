@@ -8,7 +8,7 @@
   <g>
     <rect x="64" y="140" width="320" height="180" rx="18" fill="#10151A" stroke="#2A323C" stroke-width="2"/>
     <text x="92" y="180" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="18" fill="#3DDC97">① 触发层</text>
-    <text x="92" y="210" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="16" fill="#B8C1C9">extensions/workflow-gate.ts</text>
+    <text x="92" y="210" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="16" fill="#B8C1C9">extensions/workflow-gate/index.ts</text>
     <text x="92" y="240" font-family="ui-sans-serif, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#8B95A1">粗筛候选 → 提醒确认任务实质</text>
     <text x="92" y="264" font-family="ui-sans-serif, -apple-system, 'Segoe UI', sans-serif" font-size="15" fill="#8B95A1">豁免语 / pause / 进行中只提示进度</text>
   </g>

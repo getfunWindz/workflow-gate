@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-black?style=flat-square)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-Model_Context_Protocol-3DDC97?style=flat-square)](https://modelcontextprotocol.io)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3DDC97?style=flat-square)](https://www.python.org)
-[![Version](https://img.shields.io/badge/Version-v0.2.0-3DDC97?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-v1.1.0-3DDC97?style=flat-square)](CHANGELOG.md)
 
 ![workflow-gate hero：标题与真实 wf_begin 会话输出、检查点轨道](assets/readme/hero.svg)
 
@@ -78,14 +78,13 @@ pip install mcp pydantic
 | `wf_audit` | 追溯审计时 | 读取 audit.log 最近记录（begin/check/豁免/规则变更）；`limit` 可选 |
 | `wf_rules` | 管理规则时 | 查看/启用/禁用规则（无 pi 扩展时替代原 `/workflow` 命令）；`list` / `enable <rule>` / `disable <rule>` |
 
-### 任务类型 → 技能链（12 类 + 豁免）
+### 任务类型 → 技能链（11 类 + 豁免）
 
 | 类型 | 触发场景 | 强制技能链 | 阶段 |
 |---|---|---|---|
 | `bug` | 报错 / 测试失败 / 异常行为 | `systematic-debugging` | 复现问题 → 定位根因 → 实施修复或记录结论 → 运行验证并展示证据 |
 | `implement` | 实现功能/修复 | `test-driven-development` | 先写测试 → 实现功能 → 测试通过 |
 | `multi_step` | 重构/迁移/搭建/新项目 | `writing-plans` + `executing-plans` | 产出计划 → 按计划执行 |
-| `claim_complete` | 声称完成之前 | `verification-before-completion` | 运行验证并展示证据 |
 | `feature_design` | 新功能/创意设计 | `brainstorming` | 探索需求与设计选项 → 与用户确认方案 |
 | `doc_writing` | 正式文档（报告/README/说明书） | `doc-coauthoring` | 明确文档结构与读者 → 撰写初稿 → 复核文档可用性 |
 | `decision` | 讨论/决策（先聊清楚再定） | `brainstorming` | 讨论澄清需求 → 与用户确认方案 → 记录决策结论 |
@@ -96,17 +95,23 @@ pip install mcp pydantic
 | `isolation` | 隔离工作区开发 | `using-git-worktrees` | 创建隔离工作区 → 在隔离区开发 → 合并回主工作区 |
 | `none` | 显式不走流程 | — | 豁免（audit 留痕，不残留状态） |
 
-## ⚠️ pi 扩展状态（v0.3.1 起已停用）
+## pi 扩展（v1.1 合规版）
 
-> **回滚说明**：pi 扩展（自动提醒）曾两次导致 pi 启动/输入异常，已全部移除（`extensions/` 无残留）。`extension/` 目录仅保留参考实现（未部署不生效）。
-> 推荐模式：**宪章（AGENTS.md 工作流表）+ MCP Server**——任务开始时**主动调用 `wf_begin`** 获取阶段清单；规则管理用 `wf_rules`（无 `/workflow` 命令）；核心门控功能不受影响。
+自动提醒由 pi 扩展提供（官方子目录结构 `extensions/workflow-gate/{index.ts,core.ts}`），安全设计：异常隔离（扩展出错不影响 pi 输入）/ 同步工厂 / 零网络调用。支持 `/workflow list|status|enable|disable|pause|resume` 命令。
+
+**提醒分两级**（减少打扰）：
+- **直接型**（bug/implement/review/research/doc_writing）：识别后直接建议 `wf_begin`，不再询问；
+- **确认型**（feature_design/multi_step/decision/merge/isolation）：先与用户确认任务实质再启动；
+- 豁免：消息含豁免语（"先讨论/跳过流程"）或 `wf_begin(task_type="none")` 即不触发。
 
 ### 触发机制
 
 ```
 用户消息 ─▶ ① 豁免语？ 是▶ 静默        ─▶ ② /workflow pause？ 是▶ 静默
            ─▶ ③ 有进行中任务？ 是▶ 仅提示进度（不重复分类）
-           ─▶ ④ 关键词粗筛候选（交付物优先级排序）─ 无▶ 静默；有▶ 提醒「先确认任务实质」
+           ─▶ ④ 关键词粗筛候选（11 类优先级排序）
+                ├─ 直接型（5 类）▶ 提醒「建议直接 wf_begin」
+                └─ 确认型（5 类）▶ 提醒「先确认任务实质」
 ```
 
 ## 架构
@@ -119,9 +124,9 @@ pip install mcp pydantic
 |---|---|
 | `workflow_gate_mcp.py` | MCP Server（5 工具：状态、审计、门控输出） |
 | `workflow.json` | 规则表：任务类型 → 技能链/阶段/开关；`"ordered": true` 强制顺序 |
-| `extension/workflow-gate/index.ts` | pi 扩展入口（input 提醒、`/workflow` 命令）；**子目录模式**：pi 仅自动发现顶层 *.ts 与 */index.ts，core.ts 不会被误加载为扩展 |
-| `extension/workflow-gate/core.ts` | 扩展纯逻辑（分类候选/豁免/提醒文案），可独立测试 |
-| `tests/` `test/` | Python（unittest 11 例）+ TypeScript（node:test 11 例） |
+| `extension/workflow-gate/index.ts` | pi 扩展入口（input 提醒、`/workflow` 命令）；官方子目录模式（仅发现 `*/index.ts`，core.ts 不会误加载为扩展） |
+| `extension/workflow-gate/core.ts` | 扩展纯逻辑（11 类候选/两级提醒/豁免），node --test 20 例 |
+| `tests/` `test/` | Python（unittest 18 例）+ TypeScript（node:test 20 例） |
 | `state.json` / `audit.log` | 运行时进度与审计（不入库） |
 
 自定义规则只需在 `workflow.json` 追加：
