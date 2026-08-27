@@ -166,6 +166,40 @@ class TestWorkflowGate(unittest.TestCase):
         out = self.call(self.m.wf_rules, "disable", "not-a-rule")
         self.assertIn("未知规则", out)
 
+    # ── wf_audit 审计查询 ─────────────────────
+    def test_wf_audit_lists_recent(self):
+        self.call(self.m.wf_begin, "bug", "审计测试")
+        self.call(self.m.wf_check, "reproduce", "已复现")
+        out = self.call(self.m.wf_audit)
+        self.assertIn("wf_begin", out)
+        self.assertIn("wf_check", out)
+
+    def test_wf_audit_empty(self):
+        out = self.call(self.m.wf_audit)
+        self.assertTrue("无审计记录" in out or "无审计" in out, "空审计提示")
+
+    # ── 任务级备注归档 ─────────────────────────
+    def test_wf_begin_archives_old_notes(self):
+        self.call(self.m.wf_begin, "bug")
+        self.call(self.m.wf_check, "reproduce", "旧任务备注")
+        self.call(self.m.wf_begin, "research", "新任务")  # 切换任务应归档旧备注
+        st = self.read_state()
+        self.assertIn("history", st)
+        self.assertEqual(len(st["history"]), 1)
+        self.assertIn("bug", st["history"][0]["task_type"])
+        # 当前任务 notes 应已清空
+        self.assertNotIn("reproduce", st.get("notes", {}))
+        out = self.call(self.m.wf_notes)
+        self.assertNotIn("旧任务备注", out)
+        # 历史回读
+        out = self.call(self.m.wf_notes, True)
+        self.assertIn("旧任务备注", out)
+
+    def test_wf_notes_history_flag_compat(self):
+        self.call(self.m.wf_begin, "bug")
+        out = self.call(self.m.wf_notes, True)  # 无历史时不应崩溃
+        self.assertIsInstance(out, str)
+
     # ── 规则表一致性 ──────────────────────────
     def test_new_rules_present_in_json(self):
         rules = json.load(open(self.m.RULES_PATH, encoding="utf-8"))

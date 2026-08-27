@@ -73,8 +73,9 @@ pip install mcp pydantic
 | `wf_begin` | 任务开始时 | 按类型返回技能链与阶段清单；`task_type="none"` 声明豁免 |
 | `wf_check` | 阶段完成时 | 标记阶段、显示下一步；可选 `evidence` 附验证证据 |
 | `wf_status` | 任意时刻 | 查看任务类型、进度、留痕数量 |
-| `wf_notes` | 回读备注时 | 列出各阶段备注与证据（审计用） |
+| `wf_notes` | 回读备注时 | 列出阶段备注与证据；`history=true` 追加历史任务归档 |
 | `wf_reset` | 任务结束时 | 清除任务状态 |
+| `wf_audit` | 追溯审计时 | 读取 audit.log 最近记录（begin/check/豁免/规则变更）；`limit` 可选 |
 | `wf_rules` | 管理规则时 | 查看/启用/禁用规则（无 pi 扩展时替代原 `/workflow` 命令）；`list` / `enable <rule>` / `disable <rule>` |
 
 ### 任务类型 → 技能链（12 类 + 豁免）

@@ -129,12 +129,25 @@ async def wf_begin(task_type: str, description: str = "") -> str:
             label = _stage_label(prev, labels)
             remnant = (f"⚠ 检测到上一任务「{prev}（{label}）」尚未完成"
                        f"（{len(done)}/{len(total)}），请先调用 wf_reset 结束旧任务。\n\n")
+    # 任务级归档：把旧任务摘要存入 history，当前任务 notes 不再跨任务累积
+    history = state.get("history", [])
+    if prev:
+        history.append({
+            "task_type": prev,
+            "stages": state.get("stages", []),
+            "done": state.get("done", []),
+            "notes": state.get("notes", {}),
+            "started_at": state.get("started_at"),
+            "ended_at": _now(),
+        })
     state["task_type"] = task_type
     state["description"] = description
     state["skills"] = skills
     state["stages"] = stages
     state["ordered"] = ordered
     state["done"] = []
+    state["notes"] = {}
+    state["history"] = history[-20:]  # 最多保留 20 个历史任务
     state["started_at"] = _now()
     state["updated_at"] = _now()
     _save_state(state)
@@ -254,27 +267,62 @@ async def wf_rules(action: str = "list", rule: str = "") -> str:
 
 
 @mcp.tool()
-async def wf_notes() -> str:
-    """回读当前任务各阶段记录的备注与证据（审计用）。无激活任务时列出最近豁免/审计？仅当任务激活时有效。"""
+async def wf_notes(history: bool = False) -> str:
+    """回读阶段备注与证据（审计用）。
+    history=False 时仅显示当前任务；history=True 时追加显示已归档的历史任务备注。"""
     state = _load_state()
     if not state.get("task_type"):
         return "⏸ 当前没有激活的任务。先调用 wf_begin 开始任务后再读取备注。"
     labels = _load_rules()[1]
+    parts = []
     notes = state.get("notes") or {}
-    if not notes:
-        return "📋 当前任务尚无阶段备注。"
-    lines = ["📋 阶段备注与证据：", "━━━━━━━━━━━━━━━━━━━━━━━━"]
-    for st, rec in notes.items():
-        label = _stage_label(st, labels)
-        if isinstance(rec, dict):
-            note = rec.get("note", "") or "（未填备注）"
-            ev = rec.get("evidence", "")
-            at = rec.get("at", "")
-            ev_line = f"\n  🔎 证据: {ev}" if ev else ""
-            lines.append(f"• {st}（{label}）· {at}\n    {note}{ev_line}")
-        else:
-            lines.append(f"• {st}（{label}）\n    {_note_text(rec)}")
-    return "\n".join(lines)
+    if notes:
+        lines = ["📋 当前任务阶段备注与证据：", "━━━━━━━━━━━━━━━━━━━━━━━━"]
+        for st, rec in notes.items():
+            label = _stage_label(st, labels)
+            if isinstance(rec, dict):
+                note = rec.get("note", "") or "（未填备注）"
+                ev = rec.get("evidence", "")
+                at = rec.get("at", "")
+                ev_line = f"\n  🔎 证据: {ev}" if ev else ""
+                lines.append(f"• {st}（{label}）· {at}\n    {note}{ev_line}")
+            else:
+                lines.append(f"• {st}（{label}）\n    {_note_text(rec)}")
+        parts.append("\n".join(lines))
+    else:
+        parts.append("📋 当前任务尚无阶段备注。")
+    if history:
+        hist = state.get("history", []) or []
+        if hist:
+            hlines = ["", "🕘 历史任务归档：", "━━━━━━━━━━━━━━━━━━━━━━━━"]
+            for h in reversed(hist[-5:]):
+                label = _stage_label(h.get("task_type", "?"), labels)
+                hlines.append(f"• {h.get('task_type')}（{label}）· {h.get('started_at') or '-'}")
+                for st, rec in (h.get("notes") or {}).items():
+                    txt = _note_text(rec)
+                    if "evidence" in (rec if isinstance(rec, dict) else {}):
+                        txt = rec.get("note", "") + f" [证据: {rec.get('evidence', '')[:40]}]"
+                    hlines.append(f"    - {st}: {txt[:80]}")
+            parts.append("\n".join(hlines))
+    return "\n".join(parts)
+
+
+@mcp.tool()
+async def wf_audit(limit: int = 20) -> str:
+    """读取审计日志（audit.log）：最近 limit 条动作记录（begin/check/豁免/规则变更/reset）。"""
+    if not os.path.exists(AUDIT_PATH):
+        return "📄 无审计记录（audit.log 尚未创建）。"
+    try:
+        with open(AUDIT_PATH, encoding="utf-8") as f:
+            lines = [l.rstrip() for l in f if l.strip()]
+    except Exception:
+        return "✗ 审计日志读取失败。"
+    if not lines:
+        return "📄 无审计记录。"
+    limit = max(1, min(int(limit or 20), 200))
+    recent = lines[-limit:]
+    return (f"📜 审计日志（最近 {len(recent)}/{len(lines)} 条）：\n"
+            + "\n".join(recent))
 
 
 @mcp.tool()
