@@ -57,7 +57,7 @@ test("普通消息不豁免", () => {
 
 // ── 提醒文案 ─────────────────────────────
 test("buildReminder：引导确认而非直接裁决", () => {
-  const r = buildReminder(["doc_writing", "implement"]);
+  const r = buildReminder(["feature_design", "multi_step"]);
   assert.ok(r);
   assert.ok(r.includes("确认任务实质"));
   assert.ok(r.includes("候选"));
@@ -65,6 +65,42 @@ test("buildReminder：引导确认而非直接裁决", () => {
 
 test("buildReminder：空候选 → null", () => {
   assert.equal(buildReminder([]), null);
+});
+
+// ── 直接型 vs 确认型（v1.1） ──────────────────────
+test("直接型（bug）→ 建议式文案，不要求确认", () => {
+  const r = buildReminder(["bug"]);
+  assert.ok(r);
+  assert.ok(!r.includes("请先与用户确认任务实质"), "直接型不应要求确认");
+  assert.ok(r.includes("建议直接调用 wf_begin"), "应给出建议调用");
+});
+
+test("确认型（feature_design）→ 保留确认引导", () => {
+  const r = buildReminder(["feature_design"]);
+  assert.ok(r);
+  assert.ok(r.includes("请先与用户确认任务实质"));
+});
+
+test("review/research 为直接型", () => {
+  assert.ok(!buildReminder(["review"]).includes("请先与用户确认"));
+  assert.ok(!buildReminder(["research"]).includes("请先与用户确认"));
+});
+
+// ── 新词命中（v1.1 词库） ────────────────────────
+test("merge 类词可命中", () => {
+  assert.ok(detectTaskCandidates("准备合并并发布上线").includes("merge"));
+});
+
+test("review_received 类词可命中", () => {
+  assert.ok(detectTaskCandidates("我收到了评审意见").includes("review_received"));
+});
+
+test("isolation 类词可命中", () => {
+  assert.ok(detectTaskCandidates("在隔离工作区开发").includes("isolation"));
+});
+
+test("review 补充词可命中", () => {
+  assert.ok(detectTaskCandidates("代码审查这个项目").includes("review"));
 });
 
 // ── 进度提示 ─────────────────────────────

@@ -34,15 +34,6 @@
         "execute"
       ]
     },
-    "claim_complete": {
-      "enabled": true,
-      "skills": [
-        "verification-before-completion"
-      ],
-      "stages": [
-        "verify"
-      ]
-    },
     "feature_design": {
       "enabled": true,
       "skills": [

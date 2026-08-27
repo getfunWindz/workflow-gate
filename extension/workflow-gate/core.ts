@@ -5,7 +5,7 @@
 
 export type TaskType = string;
 
-/** 交付物信号优先级：文档 > bug > 实现 > 计划 > 设计 > 讨论 > 调研 > 评审 */
+/** 交付物信号优先级：文档 > bug > 实现 > 计划 > 设计 > 讨论 > 调研 > 评审 > 合并 > 反馈 > 隔离 */
 export const TYPE_PRIORITY: string[] = [
   "doc_writing",
   "bug",
@@ -15,6 +15,9 @@ export const TYPE_PRIORITY: string[] = [
   "decision",
   "research",
   "review",
+  "merge",
+  "review_received",
+  "isolation",
 ];
 
 export const TYPE_LABELS: Record<string, string> = {
@@ -40,9 +43,19 @@ export const KEYWORDS: Record<string, string[]> = {
   feature_design: ["想做一个", "创意", "点子", "brainstorm", "头脑风暴", "设计方案", "需求分析"],
   doc_writing: ["文档", "方案书", "报告", "说明书", "README", "readme", "写文档", "设计文档", "doc", "document"],
   decision: ["讨论", "决策", "定方案", "确认方案", "商量", "聊聊"],
-  research: ["调研", "检索", "搜索资料", "查资料", "找数据", "评估数据集", "查询论文"],
-  review: ["回顾", "评审", "全面检查", "找问题", "审查", "review"],
+  research: ["调研", "检索", "搜索资料", "查资料", "找数据", "评估数据集", "查询论文", "资料收集"],
+  review: ["回顾", "评审", "全面检查", "找问题", "审查", "review", "代码审查", "看看问题"],
+  merge: ["合并", "发布", "pull request", "pull-request", "上线", "交付"],
+  review_received: ["评审意见", "收到反馈", "审阅意见", "评审反馈", "review 意见"],
+  isolation: ["工作区", "隔离", "并行开发", "实验", "沙箱"],
 };
+
+/** 直接型：交付物明确，提醒直接建议执行（不要求用户确认任务实质） */
+export const DIRECT_TYPES: string[] = ["bug", "implement", "review", "research", "doc_writing"];
+
+export function isDirectType(t: string): boolean {
+  return DIRECT_TYPES.includes(t);
+}
 
 /** 豁免语：命中则本轮不触发流程提醒（用户显式声明不走流程） */
 export const EXEMPT_PHRASES: string[] = [
@@ -71,11 +84,17 @@ export function detectTaskCandidates(text: string, max = 3): string[] {
   return TYPE_PRIORITY.filter((t) => hits.has(t)).slice(0, max);
 }
 
-/** 组装分类确认提醒（候选空返回 null） */
+/** 组装提醒：直接型=建议执行；确认型=先确认任务实质（候选空返回 null） */
 export function buildReminder(candidates: string[]): string | null {
   if (candidates.length === 0) return null;
   const primary = candidates[0];
   const names = candidates.map((c) => `${c}（${TYPE_LABELS[c] ?? c}）`).join("、");
+  if (isDirectType(primary)) {
+    return (
+      `\n\n> ⚙️ **workflow-gate**：检测到「${primary}」相关任务（候选：${names}）。\n` +
+      `> 建议直接调用 wf_begin(task_type="${primary}") 获取阶段清单；若任务实质不同，可换 task_type 或声明豁免（task_type="none"）。`
+    );
+  }
   return (
     `\n\n> ⚙️ **workflow-gate**：检测到可能是「${primary}」相关任务（候选：${names}）。\n` +
     `> 请先与用户确认任务实质（交付物是代码/文档/决策？），再调用 wf_begin(task_type=...) ` +
