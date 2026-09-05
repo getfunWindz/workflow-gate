@@ -22,6 +22,7 @@ import {
   isExempted,
   buildReminder,
   buildProgressHint,
+  buildObjectiveGuideline,
   TYPE_LABELS,
 } from "./core.ts";
 
@@ -70,6 +71,18 @@ function stateHint(state: any): string | null {
 }
 
 export default function (pi: ExtensionAPI) {
+  // 每轮对话注入客观性约束（system prompt 链式追加；异常隔离）：
+  // before_agent_start 在用户提交 prompt 后、agent 循环前触发，返回 systemPrompt 即续写
+  pi.on("before_agent_start", async (event, _ctx) => {
+    try {
+      return {
+        systemPrompt: event.systemPrompt + buildObjectiveGuideline(),
+      };
+    } catch {
+      return;
+    }
+  });
+
   // 用户输入时附加工作流提醒。整体 try/catch：扩展侧任何异常都不得影响输入管线。
   pi.on("input", async (event, ctx) => {
     try {

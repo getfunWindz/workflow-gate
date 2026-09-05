@@ -34,19 +34,19 @@ export const TYPE_LABELS: Record<string, string> = {
   isolation: "隔离开发",
 };
 
-/** 关键词 → 任务类型（保守匹配；不再"首命中即返回"，改为收集候选） */
+/** 关键词 → 任务类型（v1.2 全面扩展：中文双字优先 + 英文常见词；保守匹配防单字误报） */
 export const KEYWORDS: Record<string, string[]> = {
-  bug: ["bug", "报错", "错误", "异常", "崩溃", "挂掉", "挂了", "失败", "修复", "修好", "debug", "排查", "定位问题", "测试不通过", "测试挂了"],
-  implement: ["实现", "开发", "写一个", "写个", "新增", "添加", "加个功能", "implement", "feature", "做个"],
-  multi_step: ["重构", "迁移", "搭建", "改造", "重构一下", "新项目", "架构", "计划", "规划", "设计一个"],
-  feature_design: ["想做一个", "创意", "点子", "brainstorm", "头脑风暴", "设计方案", "需求分析"],
-  doc_writing: ["文档", "方案书", "报告", "说明书", "README", "readme", "写文档", "设计文档", "doc", "document"],
-  decision: ["讨论", "决策", "定方案", "确认方案", "商量", "聊聊"],
-  research: ["调研", "检索", "搜索资料", "查资料", "找数据", "评估数据集", "查询论文", "资料收集"],
-  review: ["回顾", "评审", "全面检查", "找问题", "审查", "review", "代码审查", "看看问题"],
-  merge: ["合并", "发布", "更新", "pull request", "pull-request", "上线", "交付"],
-  review_received: ["评审意见", "收到反馈", "审阅意见", "评审反馈", "review 意见"],
-  isolation: ["工作区", "隔离", "并行开发", "沙箱"],
+  bug: ["bug", "报错", "出错", "错误", "异常", "故障", "崩溃", "挂掉", "挂了", "失败", "不工作", "没法用", "用不了", "修复", "修好", "debug", "排查", "定位问题", "测试不通过", "测试挂了", "error", "exception", "not working", "broken"],
+  implement: ["实现", "开发", "写一个", "写个", "新增", "添加", "加个功能", "创建", "构建", "implement", "feature", "做个", "build", "add", "create"],
+  multi_step: ["重构", "迁移", "搭建", "改造", "重构一下", "新项目", "架构", "计划", "规划", "设计一个", "升级", "重写", "整理", "拆分", "优化一下", "migrate", "refactor", "upgrade"],
+  feature_design: ["想做一个", "创意", "点子", "新玩法", "头脑风暴", "设计方案", "需求分析", "原型", "创新", "brainstorm", "prototype", "new idea"],
+  doc_writing: ["文档", "方案书", "报告", "说明书", "README", "readme", "写文档", "设计文档", "教程", "指南", "文章", "笔记", "总结一下", "介绍", "doc", "document", "guide", "summary"],
+  decision: ["讨论", "决策", "定方案", "确认方案", "商量", "聊聊", "要不要", "选哪个", "权衡", "拍板", "怎么选", "decide", "which one"],
+  research: ["调研", "检索", "搜索资料", "查资料", "找数据", "评估数据集", "查询论文", "资料收集", "文献", "研究一下", "查一下", "investigate", "literature"],
+  review: ["回顾", "评审", "全面检查", "找问题", "审查", "review", "代码审查", "看看问题", "自检", "复检", "审计", "audit", "inspect"],
+  merge: ["合并", "发布", "更新", "pull request", "pull-request", "上线", "交付", "合入", "部署", "release", "merge", "deploy", "ship"],
+  review_received: ["评审意见", "收到反馈", "审阅意见", "评审反馈", "review 意见", "按意见改", "处理反馈"],
+  isolation: ["工作区", "隔离", "并行开发", "沙箱", "分叉", "fork", "支线", "旁路", "sandbox", "试验一下"],
 };
 
 /** 直接型：交付物明确，提醒直接建议执行（不要求用户确认任务实质） */
@@ -109,3 +109,12 @@ export function buildProgressHint(taskType: string, done: number, total: number)
     `（${done}/${total}），请在阶段完成时用 wf_check 标记进度。`
   );
 }
+
+/** 客观性约束（v1.2）：每次对话注入 system prompt 的固定指导 */
+export function buildObjectiveGuideline(): string {
+  return (
+    "[workflow-gate 客观性原则] 保持客观中立，基于事实与证据回应；" +
+    "不要迎合用户；发现用户前提或假设有误时明确指出并给出依据。"
+  );
+}
+

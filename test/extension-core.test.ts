@@ -9,6 +9,7 @@ import {
   isExempted,
   buildReminder,
   buildProgressHint,
+  buildObjectiveGuideline,
   TYPE_LABELS,
 } from "../extension/workflow-gate/core.ts";
 
@@ -110,6 +111,38 @@ test("review 补充词可命中", () => {
 
 test("TYPE_LABELS 与规则同步（claim_complete 已删）", () => {
   assert.equal(TYPE_LABELS["claim_complete"], undefined);
+});
+
+// ── 词库扩展（v1.2） ──────────────────────────
+test("bug 新词命中：出错/故障/用不了", () => {
+  assert.ok(detectTaskCandidates("电脑这边出错了，一直没法用").includes("bug"));
+});
+
+test("multi_step 新词命中：升级/重写", () => {
+  assert.ok(detectTaskCandidates("帮我把老系统升级并重写一遍").includes("multi_step"));
+});
+
+test("implement 新词命中：创建/构建", () => {
+  assert.ok(detectTaskCandidates("帮我创建并构建这个功能").includes("implement"));
+});
+
+test("research 新词命中：文献/研究", () => {
+  assert.ok(detectTaskCandidates("查一下相关文献做研究").includes("research"));
+});
+
+test("merge 新词命中：合入/部署", () => {
+  assert.ok(detectTaskCandidates("可以把分支合入并部署上线了").includes("merge"));
+});
+
+test("isolation 新词命中：fork/试验", () => {
+  assert.ok(detectTaskCandidates("开个 fork 做试验").includes("isolation"));
+});
+
+// ── 客观性约束注入文本（v1.2） ────────────────────
+test("buildObjectiveGuideline 包含客观与不迎合", () => {
+  const g = buildObjectiveGuideline();
+  assert.ok(g.includes("客观"));
+  assert.ok(g.includes("迎合"));
 });
 
 // ── 进度提示 ─────────────────────────────
