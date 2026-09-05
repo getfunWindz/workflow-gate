@@ -138,6 +138,40 @@ test("isolation 新词命中：fork/试验", () => {
   assert.ok(detectTaskCandidates("开个 fork 做试验").includes("isolation"));
 });
 
+// ── 词库再扩展（v1.2.1 口语/行业词） ────────────────
+test("bug 口语词：打不开/卡死/闪退", () => {
+  assert.ok(detectTaskCandidates("页面打不开，还闪退卡死了").includes("bug"));
+});
+
+test("implement 口语词：搞一个/编码", () => {
+  assert.ok(detectTaskCandidates("帮我搞一个编码工具").includes("implement"));
+});
+
+test("doc_writing 行业词：白皮书/会议纪要", () => {
+  assert.ok(detectTaskCandidates("把这次会议纪要写成白皮书").includes("doc_writing"));
+});
+
+test("research 行业词：竞品分析/背景调查", () => {
+  assert.ok(detectTaskCandidates("做个竞品分析和背景调查").includes("research"));
+});
+
+test("review 行业词：安全审查/质量检查", () => {
+  assert.ok(detectTaskCandidates("做一次安全审查与质量检查").includes("review"));
+});
+
+test("merge 行业词：发版/打tag", () => {
+  assert.ok(detectTaskCandidates("准备发版并打 tag").includes("merge"));
+});
+
+test("isolation 行业词：worktree/临时分支", () => {
+  assert.ok(detectTaskCandidates("用 worktree 开个临时分支").includes("isolation"));
+});
+
+test("豁免语再扩展：先聊聊/只是咨询", () => {
+  assert.ok(isExempted("先聊聊思路，不急着动手"));
+  assert.ok(isExempted("我只是咨询一下，不走流程"));
+});
+
 // ── 客观性约束注入文本（v1.2） ────────────────────
 test("buildObjectiveGuideline 包含客观与不迎合", () => {
   const g = buildObjectiveGuideline();

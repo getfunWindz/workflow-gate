@@ -34,19 +34,19 @@ export const TYPE_LABELS: Record<string, string> = {
   isolation: "隔离开发",
 };
 
-/** 关键词 → 任务类型（v1.2 全面扩展：中文双字优先 + 英文常见词；保守匹配防单字误报） */
+/** 关键词 → 任务类型（v1.2.1：口语化/行业词/英文变体全量扩展；双字词优先防误报） */
 export const KEYWORDS: Record<string, string[]> = {
-  bug: ["bug", "报错", "出错", "错误", "异常", "故障", "崩溃", "挂掉", "挂了", "失败", "不工作", "没法用", "用不了", "修复", "修好", "debug", "排查", "定位问题", "测试不通过", "测试挂了", "error", "exception", "not working", "broken"],
-  implement: ["实现", "开发", "写一个", "写个", "新增", "添加", "加个功能", "创建", "构建", "implement", "feature", "做个", "build", "add", "create"],
-  multi_step: ["重构", "迁移", "搭建", "改造", "重构一下", "新项目", "架构", "计划", "规划", "设计一个", "升级", "重写", "整理", "拆分", "优化一下", "migrate", "refactor", "upgrade"],
-  feature_design: ["想做一个", "创意", "点子", "新玩法", "头脑风暴", "设计方案", "需求分析", "原型", "创新", "brainstorm", "prototype", "new idea"],
-  doc_writing: ["文档", "方案书", "报告", "说明书", "README", "readme", "写文档", "设计文档", "教程", "指南", "文章", "笔记", "总结一下", "介绍", "doc", "document", "guide", "summary"],
-  decision: ["讨论", "决策", "定方案", "确认方案", "商量", "聊聊", "要不要", "选哪个", "权衡", "拍板", "怎么选", "decide", "which one"],
-  research: ["调研", "检索", "搜索资料", "查资料", "找数据", "评估数据集", "查询论文", "资料收集", "文献", "研究一下", "查一下", "investigate", "literature"],
-  review: ["回顾", "评审", "全面检查", "找问题", "审查", "review", "代码审查", "看看问题", "自检", "复检", "审计", "audit", "inspect"],
-  merge: ["合并", "发布", "更新", "pull request", "pull-request", "上线", "交付", "合入", "部署", "release", "merge", "deploy", "ship"],
-  review_received: ["评审意见", "收到反馈", "审阅意见", "评审反馈", "review 意见", "按意见改", "处理反馈"],
-  isolation: ["工作区", "隔离", "并行开发", "沙箱", "分叉", "fork", "支线", "旁路", "sandbox", "试验一下"],
+  bug: ["bug", "报错", "出错", "错误", "异常", "故障", "崩溃", "挂掉", "挂了", "失败", "不工作", "没法用", "用不了", "打不开", "闪退", "卡死", "无响应", "连不上", "宕机", "修复", "修好", "debug", "排查", "定位问题", "测试不通过", "测试挂了", "error", "exception", "not working", "broken", "crash", "timeout"],
+  implement: ["实现", "开发", "写一个", "写个", "新增", "添加", "加个功能", "创建", "构建", "搞一个", "整一个", "写代码", "编码", "implement", "feature", "做个", "build", "add", "create", "coding"],
+  multi_step: ["重构", "迁移", "搭建", "改造", "重构一下", "新项目", "架构", "计划", "规划", "设计一个", "升级", "重写", "整理", "拆分", "优化一下", "分阶段", "任务拆解", "大工程", "migrate", "refactor", "upgrade"],
+  feature_design: ["想做一个", "创意", "点子", "新玩法", "头脑风暴", "设计方案", "需求分析", "原型", "创新", "产品设计", "交互设计", "用户体验", "脑洞", "MVP", "brainstorm", "prototype", "new idea"],
+  doc_writing: ["文档", "方案书", "报告", "说明书", "README", "readme", "写文档", "设计文档", "教程", "指南", "文章", "笔记", "总结一下", "介绍", "白皮书", "会议纪要", "专栏", "博客", "doc", "document", "guide", "summary", "writeup"],
+  decision: ["讨论", "决策", "定方案", "确认方案", "商量", "聊聊", "要不要", "选哪个", "权衡", "拍板", "怎么选", "方案对比", "利弊", "二选一", "decide", "which one", "go or no go"],
+  research: ["调研", "检索", "搜索资料", "查资料", "找数据", "评估数据集", "查询论文", "资料收集", "文献", "研究一下", "查一下", "竞品分析", "背景调查", "市场调研", "盘点", "综述", "investigate", "literature"],
+  review: ["回顾", "评审", "全面检查", "找问题", "审查", "review", "代码审查", "看看问题", "自检", "复检", "审计", "质量检查", "安全审查", "挑刺", "体检", "audit", "inspect", "security review"],
+  merge: ["合并", "发布", "更新", "pull request", "pull-request", "上线", "交付", "合入", "部署", "发版", "打 tag", "打tag", "release notes", "上架", "release", "merge", "deploy", "ship"],
+  review_received: ["评审意见", "收到反馈", "审阅意见", "评审反馈", "review 意见", "按意见改", "处理反馈", "回复评审", "复审", "处理 review"],
+  isolation: ["工作区", "隔离", "并行开发", "沙箱", "分叉", "fork", "支线", "旁路", "临时分支", "单独环境", "worktree", "sandbox", "试验一下"],
 };
 
 /** 直接型：交付物明确，提醒直接建议执行（不要求用户确认任务实质） */
@@ -59,8 +59,9 @@ export function isDirectType(t: string): boolean {
 /** 豁免语：命中则本轮不触发流程提醒（用户显式声明不走流程） */
 export const EXEMPT_PHRASES: string[] = [
   "跳过流程", "不用流程", "先讨论", "别走流程", "豁免", "不走流程",
-  "不需要流程", "先沟通", "不启用", "不适用", "暂不",
-  "skip workflow", "no workflow", "skip it",
+  "不需要流程", "先沟通", "不启用", "不适用", "暂不", "先聊聊", "仅咨询",
+  "只咨询", "随便问问", "先了解一下", "不急着动手",
+  "skip workflow", "no workflow", "skip it", "just asking",
 ];
 
 export function isExempted(text: string): boolean {
